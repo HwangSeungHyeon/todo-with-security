@@ -16,8 +16,8 @@ class SwaggerConfig {
     fun openAPI(): OpenAPI = OpenAPI()
         .info(
             Info()
-                .title("velog API")
-                .description("velog API schema")
+                .title("Todo List API")
+                .description("Todo List API schema")
                 .version("1.0.0")
         )
 }
