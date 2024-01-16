@@ -44,3 +44,4 @@ Spring Security와 JWT를 사용하여 할일 작성 어플리케이션 백엔�
 |선택한 댓글 삭제|GET|204|/todos/{todoId}/comments/{commentId}|{<br>todoId: Long,<br>commentId: Long<br>}||
 
 ### ERD
+![ERD](https://github.com/HwangSeungHyeon/todo-with-security/blob/develop/img/ERD.png)
