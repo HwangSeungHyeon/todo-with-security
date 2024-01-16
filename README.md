@@ -24,5 +24,23 @@ Spring Security와 JWT를 사용하여 할일 작성 어플리케이션 백엔�
 <img src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
 
 ### API Document
+#### Todo API
+|기능|Method|Status Code|URI|Request|Response|
+|----|------|----------|---|--------|--------|
+|할 일 상세조회|GET|200|/todos/{todoId}|{<br>todoId: Long<br>}|{<br>todoId: Long,<br>title: String,<br>content: String,<br> createName: String,<br>createdDate: LocalDateTime,<br>status: Boolean, <br>comments: MutableList\<CommentEntity\><br>}|
+|할 일 목록 조회|GET|200|/todos||{<br>todoId: Long,<br>title: String,<br>content: String,<br> createName: String,<br>createdDate: LocalDateTime,<br>status: Boolean<br>}|
+|할 일 작성|POST|201|/todos|{<br>title: String,<br>content: String<br>}|{<br>todoId: Long,<br>title: String,<br>content: String,<br> createName: String,<br>createdDate: LocalDateTime,<br>status: Boolean<br>}|
+|선택한 할 일 수정|GET|200|/todos/{todoId}|{<br>todoId: Long<br>title: String,<br>content: String<br>}|{<br>todoId: Long,<br>title: String,<br>content: String,<br> createName: String,<br>createdDate: LocalDateTime,<br>status: Boolean<br>}|
+|선택한 할 일 상태 수정|GET|200|/todos/{todoId}|{<br>todoId: Long<br>status: Boolean<br>}|{<br>todoId: Long,<br>title: String,<br>content: String,<br> createName: String,<br>createdDate: LocalDateTime,<br>status: Boolean<br>}|
+|선택한 할 일 삭제|GET|204|/todos/{todoId}|{<br>todoId: Long<br>}||
+
+#### Comment API
+|기능|Method|Status Code|URI|Request|Response|
+|----|------|----------|---|--------|--------|
+|댓글 단일 조회|GET|200|/todos/{todoId}/comments/{commentId}|{<br>todoId: Long<br>commentId: Long<br>}|{<br>commentId: Long,<br>content: String,<br>name: String<br>create_at: LocalDateTime<br>}|
+|댓글 목록 조회|GET|200|/todos/{todoId}/comments|{<br>todoId: Long<br>}|{<br>commentId: Long,<br>content: String,<br>name: String<br>create_at: LocalDateTime<br>}|
+|댓글 작성|POST|201|/todos/{todoId}/comments|{<br>todoId: Long,<br>title: String,<br>content: String<br>}|{<br>commentId: Long,<br>content: String,<br>name: String<br>create_at: LocalDateTime<br>}|
+|선택한 댓글 수정|GET|200|/todos/{todoId}/comments/{commentId}|{<br>todoId: Long,<br>commentId: Long,<br>title: String,<br>content: String<br>}|{<br>commentId: Long,<br>content: String,<br>name: String<br>create_at: LocalDateTime<br>}|
+|선택한 댓글 삭제|GET|204|/todos/{todoId}/comments/{commentId}|{<br>todoId: Long,<br>commentId: Long<br>}||
 
 ### ERD
