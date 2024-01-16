@@ -1,11 +1,12 @@
 package com.teamsparta.mytodoapp.domain.todo.dto.response
 
+import com.teamsparta.mytodoapp.domain.comment.model.CommentEntity
 import com.teamsparta.mytodoapp.domain.todo.model.TodoEntity
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
-@Schema(description = "할 일 카드 CRUD에 대한 반응을 전달하는 객체")
-data class TodoResponseDto(
+@Schema(description = "상세 페이지 조회에 대한 반응을 전달하는 객체")
+data class DetailResponseDto(
     @Schema(description = "할 일 카드 PK", example = "0")
     val todoId: Long,
 
@@ -25,20 +26,24 @@ data class TodoResponseDto(
     val updateAt: LocalDateTime,
 
     @Schema(description = "완료 상태")
-    val status: Boolean
+    val status: Boolean,
+
+    @Schema(description = "할 일에 달린 댓글")
+    val comments: MutableList<CommentEntity>
 ){
     companion object{
-        fun toResponse(
+        fun toDetailResponse(
             todoEntity: TodoEntity
-        ): TodoResponseDto{
-            return TodoResponseDto(
+        ): DetailResponseDto{
+            return DetailResponseDto(
                 todoId = todoEntity.todoId!!,
                 title = todoEntity.title,
                 content = todoEntity.content,
                 createName = todoEntity.createName!!,
                 createAt = todoEntity.createAt!!,
                 updateAt = todoEntity.updateAt!!,
-                status = todoEntity.status
+                status = todoEntity.status,
+                comments = todoEntity.comments
             )
         }
     }
