@@ -2,8 +2,8 @@ package com.teamsparta.mytodoapp.domain.todo.service
 
 import com.teamsparta.mytodoapp.domain.exception.ModelNotFoundException
 import com.teamsparta.mytodoapp.domain.todo.dto.request.CreateTodoDto
-import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateStatusDto
 import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateTodoDto
+import com.teamsparta.mytodoapp.domain.todo.dto.response.DetailResponseDto
 import com.teamsparta.mytodoapp.domain.todo.dto.response.TodoResponseDto
 import com.teamsparta.mytodoapp.domain.todo.model.TodoEntity
 import com.teamsparta.mytodoapp.domain.todo.repository.TodoRepository
@@ -17,22 +17,22 @@ class TodoServiceImpl(
 ): TodoService {
     override fun getTodo(
         todoId: Long
-    ): TodoResponseDto {
+    ): DetailResponseDto {
         return todoRepository
             .findByIdOrNull(todoId)
-            ?.let { TodoEntity.toResponseDto(it) } //null이 아닐 경우 여기 실행
+            ?.let { DetailResponseDto.toDetailResponse(it) } //null이 아닐 경우 여기 실행
             ?: throw ModelNotFoundException("todo", todoId) //null일 경우 여기 실행
     }
 
     override fun getTodoList(): List<TodoResponseDto> {
         return todoRepository
             .findAllByOrderByCreateAtDesc()
-            .map { TodoEntity.toResponseDto(it) }
+            .map { TodoResponseDto.toResponse(it) }
     }
 
     override fun createTodo(createTodoDto: CreateTodoDto): TodoResponseDto {
         val entity = todoRepository.save(TodoEntity.toEntity(createTodoDto))
-        return TodoEntity.toResponseDto(entity)
+        return TodoResponseDto.toResponse(entity)
     }
 
     @Transactional
@@ -45,20 +45,19 @@ class TodoServiceImpl(
 
         return entity
             .apply { update(updateTodoDto) }
-            .let { TodoEntity.toResponseDto(it) }
+            .let { TodoResponseDto.toResponse(it) }
     }
 
     @Transactional
     override fun updateStatus(
-        todoId: Long,
-        updateStatusDto: UpdateStatusDto
+        todoId: Long
     ): TodoResponseDto {
         val entity = todoRepository.findByIdOrNull(todoId)
             ?: throw ModelNotFoundException("todo", todoId)
 
         return entity
-            .apply { changeStatus(updateStatusDto) }
-            .let { TodoEntity.toResponseDto(it) }
+            .apply { isComplete() }
+            .let { TodoResponseDto.toResponse(it) }
     }
 
     override fun deleteTodo(

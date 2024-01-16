@@ -1,9 +1,8 @@
 package com.teamsparta.mytodoapp.domain.todo.model
 
+import com.teamsparta.mytodoapp.domain.comment.model.CommentEntity
 import com.teamsparta.mytodoapp.domain.todo.dto.request.CreateTodoDto
-import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateStatusDto
 import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateTodoDto
-import com.teamsparta.mytodoapp.domain.todo.dto.response.TodoResponseDto
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
@@ -19,11 +18,13 @@ class TodoEntity private constructor(
     var title: String,
 
     @Column(name = "content")
-    var content: String
+    var content: String,
+
+    @OneToMany(mappedBy = "todoId", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
+    val comments: MutableList<CommentEntity> = mutableListOf()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "todo_id")
     var todoId: Long? = null
 
     @CreatedBy
@@ -46,25 +47,11 @@ class TodoEntity private constructor(
         content = updateTodoDto.content
     }
 
-    fun changeStatus(updateStatusDto: UpdateStatusDto){
-        status = updateStatusDto.status
+    fun isComplete(){
+        status = true
     }
 
     companion object{
-        fun toResponseDto(
-            todoEntity: TodoEntity
-        ): TodoResponseDto{
-            return TodoResponseDto(
-                todoId = todoEntity.todoId!!,
-                title = todoEntity.title,
-                content = todoEntity.content,
-                createName = todoEntity.createName!!,
-                createAt = todoEntity.createAt!!,
-                updateAt = todoEntity.updateAt!!,
-                status = todoEntity.status
-            )
-        }
-
         fun toEntity(
             createTodoDto: CreateTodoDto
         ): TodoEntity{

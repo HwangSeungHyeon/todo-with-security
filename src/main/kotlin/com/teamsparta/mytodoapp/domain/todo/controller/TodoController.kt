@@ -2,12 +2,11 @@ package com.teamsparta.mytodoapp.domain.todo.controller
 
 import com.teamsparta.mytodoapp.domain.todo.dto.request.CreateTodoDto
 import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateTodoDto
-import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateStatusDto
+import com.teamsparta.mytodoapp.domain.todo.dto.response.DetailResponseDto
 import com.teamsparta.mytodoapp.domain.todo.dto.response.TodoResponseDto
 import com.teamsparta.mytodoapp.domain.todo.service.TodoService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -30,7 +29,7 @@ class TodoController(
     @GetMapping("/{todoId}")
     fun getTodo(
         @PathVariable todoId: Long,
-    ): ResponseEntity<TodoResponseDto>{
+    ): ResponseEntity<DetailResponseDto>{
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getTodo(todoId))
@@ -39,7 +38,7 @@ class TodoController(
     @Operation(summary = "할 일 작성", description = "할 일을 작성합니다.")
     @PostMapping
     fun createTodo(
-        createTodoDto: CreateTodoDto
+        @RequestBody createTodoDto: CreateTodoDto
     ): ResponseEntity<TodoResponseDto>{
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -50,7 +49,7 @@ class TodoController(
     @PutMapping("/{todoId}")
     fun updateTodo(
         @PathVariable todoId: Long,
-        updateTodoDto: UpdateTodoDto
+        @RequestBody updateTodoDto: UpdateTodoDto
     ): ResponseEntity<TodoResponseDto>{
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -60,19 +59,18 @@ class TodoController(
     @Operation(summary = "선택한 할 일 상태 수정", description = "선택한 할 일의 상태를 수정합니다.")
     @PatchMapping("/{todoId}")
     fun updateStatus(
-        @PathVariable todoId: Long,
-        updateStatusDto: UpdateStatusDto
+        @PathVariable todoId: Long
     ): ResponseEntity<TodoResponseDto>{
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateStatus(todoId, updateStatusDto))
+            .body(todoService.updateStatus(todoId))
     }
 
     @Operation(summary = "선택한 할 일 삭제", description = "선택한 할 일을 삭제합니다.")
     @DeleteMapping("/{todoId}")
     fun deleteTodo(
         @PathVariable todoId: Long
-    ): ResponseEntity<TodoResponseDto>{
+    ): ResponseEntity<Unit>{
         todoService.deleteTodo(todoId)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
