@@ -13,11 +13,27 @@ import org.springframework.http.HttpHeaders
 class SwaggerConfig {
 
     @Bean
-    fun openAPI(): OpenAPI = OpenAPI()
-        .info(
-            Info()
-                .title("Todo List API")
-                .description("Todo List API schema")
-                .version("1.0.0")
-        )
+    fun openAPI(): OpenAPI {
+        return OpenAPI()
+            .components(
+                Components().addSecuritySchemes(
+                    "Bearer Authentication",
+                    SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("Bearer")
+                        .bearerFormat("JWT")
+                        .`in`(SecurityScheme.In.HEADER)
+                        .name("Authorization")
+                )
+            )
+            .addSecurityItem(
+                SecurityRequirement().addList("Bearer Authentication")
+            )
+            .info(
+                Info()
+                    .title("Todo List API")
+                    .description("Todo List API schema")
+                    .version("1.0.0")
+            )
+    }
 }

@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 
 @Schema(description = "댓글 CRUD에 대한 반응을 전달하는 객체")
-data class CommentResponseDto(
+data class CommentResponseDto (
     @Schema(description = "댓글 PK", example = "0")
     val commentId: Long,
 
@@ -23,13 +23,15 @@ data class CommentResponseDto(
     val updateAt: LocalDateTime
 ){
     companion object{
-        fun toEntity(
-            todoId: Long,
-            addCommentRequestDto: AddCommentDto
-        ): CommentEntity {
-            return CommentEntity(
-                content = addCommentRequestDto.content,
-                todoId = todoId
+        fun toResponse(
+            commentEntity: CommentEntity
+        ): CommentResponseDto {
+            return CommentResponseDto(
+                commentId = commentEntity.commentId!!,
+                content = commentEntity.content,
+                createName = commentEntity.createName!!,
+                createAt = commentEntity.createdAt!!,
+                updateAt = commentEntity.updateAt!!
             )
         }
     }

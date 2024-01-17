@@ -3,6 +3,7 @@ package com.teamsparta.mytodoapp.domain.todo.model
 import com.teamsparta.mytodoapp.domain.comment.model.CommentEntity
 import com.teamsparta.mytodoapp.domain.todo.dto.request.CreateTodoDto
 import com.teamsparta.mytodoapp.domain.todo.dto.request.UpdateTodoDto
+import com.teamsparta.mytodoapp.infra.security.UserPrincipal
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
@@ -20,11 +21,15 @@ class TodoEntity private constructor(
     @Column(name = "content")
     var content: String,
 
+    @Column(name = "user_id")
+    val userId: Long,
+
     @OneToMany(mappedBy = "todoId", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val comments: MutableList<CommentEntity> = mutableListOf()
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "todo_id")
     var todoId: Long? = null
 
     @CreatedBy
@@ -53,11 +58,13 @@ class TodoEntity private constructor(
 
     companion object{
         fun toEntity(
-            createTodoDto: CreateTodoDto
+            createTodoDto: CreateTodoDto,
+            userPrincipal: UserPrincipal
         ): TodoEntity{
             return TodoEntity(
                 title = createTodoDto.title,
-                content = createTodoDto.content
+                content = createTodoDto.content,
+                userId = userPrincipal.userId
             )
         }
     }

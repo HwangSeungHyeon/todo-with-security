@@ -5,6 +5,9 @@ spring:
         show_sql: true
         format_sql: true
         highlight_sql: true
+  security:
+    user:
+      password: 1
 springdoc:
   swagger-ui:
     operations-sorter: method
@@ -15,3 +18,5 @@ logging:
         orm:
           jdbc:
             bind: trace
+      springframework:
+        security: debug

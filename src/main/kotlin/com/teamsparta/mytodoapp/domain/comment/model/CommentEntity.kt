@@ -1,7 +1,9 @@
 package com.teamsparta.mytodoapp.domain.comment.model
 
+import com.teamsparta.mytodoapp.domain.comment.dto.request.AddCommentDto
 import com.teamsparta.mytodoapp.domain.comment.dto.request.UpdateCommentDto
 import com.teamsparta.mytodoapp.domain.comment.dto.response.CommentResponseDto
+import com.teamsparta.mytodoapp.infra.security.UserPrincipal
 import jakarta.persistence.*
 import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
@@ -12,12 +14,15 @@ import java.time.LocalDateTime
 @EntityListeners(AuditingEntityListener::class)
 @Entity
 @Table(name = "comment2")
-class CommentEntity(
+class CommentEntity private constructor(
     @Column(name = "content")
     var content: String,
 
     @Column(name = "todo_id")
-    val todoId: Long
+    val todoId: Long,
+
+    @Column(name = "user_id")
+    val userId: Long
 ){
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +48,15 @@ class CommentEntity(
     }
 
     companion object{
-        fun toResponse(
-            commentEntity: CommentEntity
-        ): CommentResponseDto {
-            return CommentResponseDto(
-                commentId = commentEntity.commentId!!,
-                content = commentEntity.content,
-                createName = commentEntity.createName!!,
-                createAt = commentEntity.createdAt!!,
-                updateAt = commentEntity.updateAt!!
+        fun toEntity(
+            todoId: Long,
+            addCommentRequestDto: AddCommentDto,
+            userPrincipal: UserPrincipal
+        ): CommentEntity {
+            return CommentEntity(
+                content = addCommentRequestDto.content,
+                todoId = todoId,
+                userId = userPrincipal.userId
             )
         }
     }
