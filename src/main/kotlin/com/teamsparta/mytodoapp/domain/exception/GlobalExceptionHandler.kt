@@ -16,11 +16,36 @@ class GlobalExceptionHandler {
     //ModelNotFoundException: 하위 layer에서 id로 검색에 실패했을 때 발생하는 에러
     //에러가 발생하면 ResponseEntity를 반환한다.
     fun handleModelNotFoundException(e: ModelNotFoundException): ResponseEntity<ErrorResponseDto>{
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ErrorResponseDto(e.message))
+        return ResponseEntity
+            .status(HttpStatus.NOT_FOUND)
+            .body(ErrorResponseDto(e.message))
     }
 
     @ExceptionHandler(IllegalStateException::class)
     fun handleIllegalStateException(e: IllegalStateException): ResponseEntity<ErrorResponseDto>{
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ErrorResponseDto(e.message))
+        return ResponseEntity
+            .status(HttpStatus.CONFLICT)
+            .body(ErrorResponseDto(e.message))
+    }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ErrorResponseDto>{
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ErrorResponseDto(e.message))
+    }
+
+    @ExceptionHandler(InvalidCredentialException::class)
+    fun handleInvalidCredentialException(e: InvalidCredentialException): ResponseEntity<ErrorResponseDto>{
+        return ResponseEntity
+            .status(HttpStatus.UNAUTHORIZED)
+            .body(ErrorResponseDto(e.message))
+    }
+
+    @ExceptionHandler(ForbiddenException::class)
+    fun handleForbiddenException(e: ForbiddenException): ResponseEntity<ErrorResponseDto>{
+        return ResponseEntity
+            .status(HttpStatus.FORBIDDEN)
+            .body(ErrorResponseDto(e.message))
     }
 }
