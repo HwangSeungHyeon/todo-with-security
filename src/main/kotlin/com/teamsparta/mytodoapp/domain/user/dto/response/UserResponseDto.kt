@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema
 @Schema(description = "응답을 전달하는 객체")
 data class UserResponseDto(
     val userId: Long,
+    val name: String,
     val email: String,
     val role: ROLE
 ){
@@ -14,6 +15,7 @@ data class UserResponseDto(
         fun toResponse(userEntity: UserEntity): UserResponseDto{
             return UserResponseDto(
                 userId = userEntity.userId!!,
+                name = userEntity.name,
                 email = userEntity.email,
                 role = userEntity.role
             )
