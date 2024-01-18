@@ -7,7 +7,6 @@ import com.teamsparta.mytodoapp.domain.todo.dto.response.DetailResponseDto
 import com.teamsparta.mytodoapp.domain.todo.dto.response.TodoResponseDto
 import com.teamsparta.mytodoapp.domain.todo.model.TodoEntity
 import com.teamsparta.mytodoapp.domain.todo.repository.TodoRepository
-import com.teamsparta.mytodoapp.infra.aop.StopWatch
 import com.teamsparta.mytodoapp.infra.security.UserPrincipal
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
